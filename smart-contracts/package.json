@@ -1,0 +1,22 @@
+{
+  "name": "energy-ledger-smart-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --build-profile production --network sepolia",
+    "verify:sepolia": "hardhat run scripts/verify.ts --build-profile production --network sepolia"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^4.2.0",
+    "@nomicfoundation/hardhat-verify": "^3.1.2",
+    "@types/node": "^26.6.4",
+    "dotenv": "^18.0.5",
+    "ethers": "^6.17.0",
+    "hardhat": "^3.18.1",
+    "typescript": "^7.0.2"
+  }
+}

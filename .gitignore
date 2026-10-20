@@ -1,0 +1,45 @@
+# 私有文件（舊名稱也一併保護）
+/Confidential_Docs/
+/docs/
+/frontend/fixtures/
+/backend/tests/test_audit_record_hash.py
+/backend/app/cli/generate_test*
+
+# 本機設定與憑證
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+/backend/keys/
+
+# 執行資料與本機部署紀錄
+/backend/data/
+*.db
+*.db-*
+/smart-contracts/deployments/*
+!/smart-contracts/deployments/*.example.json
+
+# 相依套件與產物
+node_modules/
+.venv/
+dist/
+dist-ssr/
+artifacts/
+cache/
+coverage/
+typechain-types/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# 編輯器與系統檔
+.DS_Store
+.idea/
+.vscode/
+*.local
+*.log

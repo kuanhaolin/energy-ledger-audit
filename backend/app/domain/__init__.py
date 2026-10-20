@@ -1,0 +1,2 @@
+"""Pure notary domain logic."""
+

@@ -1,0 +1,2 @@
+"""Energy Ledger Notary backend."""
+

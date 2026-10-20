@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://powerful.com.tw/schemas/anchor/1.0/manifest.json",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "manifestType",
+    "manifestId",
+    "sequence",
+    "producer",
+    "tenantId",
+    "siteId",
+    "siteIdHash",
+    "businessDate",
+    "timezone",
+    "period",
+    "devices",
+    "crypto",
+    "categories",
+    "dailyRoot",
+    "rawExport",
+    "prevManifestId",
+    "prevManifestHash",
+    "prevDailyRoot",
+    "amends",
+    "generatedAt",
+    "manifestHash",
+    "signatures"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "manifestType": { "enum": ["DAILY", "AMENDMENT"] },
+    "manifestId": { "type": "string", "minLength": 8, "maxLength": 200 },
+    "sequence": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+    "producer": {
+      "type": "object",
+      "required": ["org", "system", "systemVersion", "producerId"],
+      "properties": {
+        "org": { "type": "string", "minLength": 1 },
+        "system": { "type": "string", "minLength": 1 },
+        "systemVersion": { "type": "string", "minLength": 1 },
+        "producerId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "siteId": { "type": "string", "minLength": 1 },
+    "siteIdHash": { "$ref": "#/$defs/prefixedHex32" },
+    "businessDate": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "minLength": 1 },
+    "period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "devices": { "type": "array", "items": { "type": "object" } },
+    "crypto": {
+      "type": "object",
+      "required": ["hashAlgorithm", "canonicalization", "merkle", "leafPrefix", "nodePrefix", "emptyRoot"],
+      "properties": {
+        "hashAlgorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "RFC8785-JCS" },
+        "merkle": { "const": "RFC6962-NODUP" },
+        "leafPrefix": { "const": "0x00" },
+        "nodePrefix": { "const": "0x01" },
+        "emptyRoot": { "pattern": "^0x[0-9a-f]{64}$" }
+      }
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["category", "count", "root"],
+        "properties": {
+          "category": { "enum": ["OPERATION", "EVENT", "TRADE", "STRATEGY", "AUDIT", "HEALTH", "METER"] },
+          "count": { "type": "integer", "minimum": 0 },
+          "root": { "$ref": "#/$defs/hex32" }
+        }
+      }
+    },
+    "dailyRoot": { "$ref": "#/$defs/hex32" },
+    "rawExport": {
+      "type": "object",
+      "required": ["format", "uri", "sha256", "sizeBytes", "recordCount"],
+      "properties": {
+        "format": { "type": "string" },
+        "uri": { "type": "string" },
+        "sha256": { "$ref": "#/$defs/hex32" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "recordCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "prevManifestId": { "type": ["string", "null"] },
+    "prevManifestHash": { "oneOf": [{ "$ref": "#/$defs/hex32" }, { "type": "null" }] },
+    "prevDailyRoot": { "oneOf": [{ "$ref": "#/$defs/hex32" }, { "type": "null" }] },
+    "amends": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/hex32" },
+        {
+          "type": "object",
+          "required": ["manifestHash"],
+          "properties": {
+            "manifestId": { "type": "string" },
+            "manifestHash": { "$ref": "#/$defs/hex32" },
+            "reason": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "manifestHash": { "$ref": "#/$defs/hex32" },
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["signer", "signerId", "alg", "certFingerprint", "signedAt", "signature"],
+        "properties": {
+          "signer": { "enum": ["PLATFORM", "EDGE"] },
+          "signerId": { "type": "string", "minLength": 1 },
+          "alg": { "const": "ES256" },
+          "certFingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "signedAt": { "type": "string", "format": "date-time" },
+          "signature": { "type": "string", "pattern": "^[A-Za-z0-9_-]{86}$" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hex32": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "prefixedHex32": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

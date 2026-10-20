@@ -1,0 +1,37 @@
+[project]
+name = "energy-ledger-notary"
+version = "0.2.0"
+description = "EMS Daily Manifest verification and blockchain anchoring service"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.116,<1.0",
+  "pydantic-settings>=2.10,<3.0",
+  "uvicorn[standard]>=0.35,<1.0",
+  "web3>=7.13,<8.0",
+  "cryptography>=45,<47",
+  "rfc8785>=0.1.4,<1.0",
+  "jsonschema>=4.25,<5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1.0",
+  "pytest>=8.4,<9.0",
+  "pytest-asyncio>=1.1,<2.0",
+  "ruff>=0.12,<1.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+app = ["schemas/*.json", "contracts/*.json", "contracts/*.md"]
